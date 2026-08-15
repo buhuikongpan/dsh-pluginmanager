@@ -106,6 +106,17 @@ pnpm add github:buhuikongpan/dsh-pluginmanager
 - 原生插件永远不提供卸载按钮，不是因为做不到，是因为没必要作死
 - 本项目与 DeepSeek 无隶属关系，纯社区行为
 
+## ❓ 常见问题
+
+**为什么我装的插件没出现在「用户扩展」里？**
+插件管理以运行时 Loader 条目为准。如果你只是 `npm i` 了包但没加激活行（`cordis.patch.yml`），它不会出现在任何一层——先在「用户扩展」里用「补登记」把它登记进依赖，再确认激活行存在。
+
+**那些带「未登记依赖」标签的是什么？**
+手工丢进 `node_modules`、没写进 `package.json` 的插件（比如你自己拷进去的）。点「补登记」即可纳入依赖管理，插件市场也能看到它。
+
+**原生插件的描述能改吗？**
+能。所有插件都支持「编辑描述」，改完存到 `~/.dsh/profiles/web/plugin-manager/descriptions.json`，重启后仍在。
+
 ## 📜 License
 
 MIT
