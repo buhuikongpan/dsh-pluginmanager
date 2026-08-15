@@ -88,13 +88,15 @@ DSH 的插件体系很强大，但原生的插件清单长这样：
 # 作为 bundle 装进 web profile（官方推荐方式）
 dsh plugin add github:buhuikongpan/dsh-pluginmanager
 
-# 或手动（npm / pnpm）
-pnpm add github:buhuikongpan/dsh-pluginmanager
-
 # 然后重启 dsh web 服务，设置 → 插件 → 插件管理
 ```
 
-本地开发调试也可以用 `file:` 依赖直接指向仓库目录。
+> ⚠️ **只选一种方式安装，不要混用。** 本插件自带 `cordis.patch.yml`（插入行 `id: pluginmanager`），装成 bundle 后由 DSH 在启动时自动应用；如果你**另外**又手工在 profile 的 `cordis.patch.yml` 里写了同样的插入行，启动会报
+> `duplicate loader entry id: pluginmanager` 并拒绝启动（同一插件被激活了两次）。
+>
+> **排查**：启动失败时检查 `~/.dsh/profiles/web/package.json` 的 `dsh.profile.bundles`（bundle 方式）和 `~/.dsh/profiles/web/cordis.patch.yml`（patch 方式）——同一插件只应出现在其中一处。从旧版（patch 行方式）升级时，先删掉 patch 里那一行再装 bundle。
+
+本地开发调试也可以用 `file:` 依赖直接指向仓库目录（记得同样不要叠加 patch 行）。
 
 ## 🛠️ 技术速览
 
@@ -120,6 +122,9 @@ pnpm add github:buhuikongpan/dsh-pluginmanager
 
 **原生插件的描述能改吗？**
 能。所有插件都支持「编辑描述」，改完存到 `~/.dsh/profiles/web/plugin-manager/descriptions.json`，重启后仍在。
+
+**启动报 `duplicate loader entry id: pluginmanager`？**
+说明插件被激活了两次（bundle 声明 + 手工 patch 行各一次）。打开 `~/.dsh/profiles/web/package.json` 确认 `dsh.profile.bundles` 里有 `dsh-pluginmanager`，再打开同目录 `cordis.patch.yml`，把里面 `- id: pluginmanager` 那一行（含它的 `insert:` 块）删掉即可——保留 bundle 这一种激活方式。
 
 ## 📜 License
 
