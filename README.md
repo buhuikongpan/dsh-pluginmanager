@@ -1,5 +1,7 @@
 # dsh-pluginmanager · 插件架构师
 
+[![Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)
+
 > 你的 DSH 装了 100 多个插件？恭喜，你现在拥有了一座没有楼层指示牌的摩天大楼。
 > 这个插件就是那张楼层指示牌——顺便把"哪层能拆、哪层是承重墙"给你标得明明白白。
 
