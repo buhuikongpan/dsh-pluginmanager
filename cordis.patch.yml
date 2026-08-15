@@ -1,0 +1,6 @@
+# dsh-pluginmanager — bundle patch: activation row for the profile layer.
+# This file is what makes the package installable via `dsh plugin add` /
+# `pnpm add github:...` and loadable as a profile bundle.
+- insert:
+    - id: pluginmanager
+      name: 'dsh-pluginmanager'
