@@ -1,7 +1,7 @@
 {
   "name": "dsh-pluginmanager",
-  "description": "插件管理器（Plugin Manager）：把 DSH 插件按 原生扩展（系统/WebUI/工具）/ 用户扩展 / 临时 分层展示，附可编辑描述、补登记与卸载管理。",
-  "version": "0.1.0",
+  "description": "插件管理器（Plugin Manager）：把 DSH 插件按 原生扩展（系统/WebUI/工具）/ 用户扩展 / 临时 分层展示，附可编辑描述、未生效诊断（含 AI 修复指引）与卸载管理。",
+  "version": "0.2.0",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
