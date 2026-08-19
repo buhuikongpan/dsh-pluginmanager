@@ -61,8 +61,7 @@ DSH 的插件体系很强大，但原生的插件清单长这样：
 
 - **停用 / 启用**：只改激活状态、配置保留，可随时反悔
 - **彻底卸载**：依赖声明 + 激活行 + 包目录一并清除，二次确认；**按插件来源智能分流**——补丁行插件卸载后热生效无需重启，扩展包（bundle）插件会明确提示重启服务（原因见「热加载，按来源分流」）
-- **补登记**：把"手工丢进 node_modules、没写进 dependencies"的插件正式登记进依赖，并立即热挂载激活——从此插件市场（marketplace）也认得它
-- **未登记依赖**标签：一眼看出哪些是规范安装、哪些是野路子
+- **未生效诊断**：任何一条用户扩展没生效时，自动打上「未生效 / 加载失败」标签，点「为什么未生效？」展开原因与按步修复指引，还能「🤖 AI 修复」——把「诊断 + 修复步骤」整理成提示词复制给一个新的 Agent 对话，由你决定是否发送
 
 ### 3. 运行中（临时）
 
@@ -103,7 +102,7 @@ dsh plugin add github:buhuikongpan/dsh-pluginmanager
 - Host 半边：完整 Node 环境，`pluginManager` Typert Remote（snapshot / setEnabled / uninstall / saveDescription / register），直接读写 profile 文件
 - 原生判定：`dsh-base` + `dsh-web-app` 官方 bundle 的依赖与 patch 声明 + Loader 内置 `cordis:` builtins
 - 卸载来源分流：`bundle` 层 → `needsRestart` 提示重启；`profile-patch` 层 → 热卸载（dsh HMR 覆盖）
-- 热挂载：`hotMount` / `hotUnmount` / `cleanHotDir`，独立目录 `plugin-manager/hot/`，补登记后免重启激活
+- 未生效诊断：每行用 Loader 相位（failed / pending）+ 来源 + 包 dsh 元数据算出「为什么未生效」的 plain-language 原因与修复步骤，并生成可复制的 AI 修复提示词（dsh-market 风格）
 - pnpm 漂移恢复：`withHoistRecovery`（hoist-pattern-diff / release-age / transient-network 自动重建并重试）
 - 补丁编辑：文本块级操作 `cordis.patch.yml`（保留注释与 `!!js` 表达式），写入前自动备份
 - Browser 半边：`settings.plugins.tab` slot 注册，纯 React + CSS 变量，零框架负担
@@ -120,10 +119,10 @@ dsh plugin add github:buhuikongpan/dsh-pluginmanager
 ## ❓ 常见问题
 
 **为什么我装的插件没出现在「用户扩展」里？**
-插件管理以运行时 Loader 条目为准。如果你只是 `npm i` 了包但没加激活行（`cordis.patch.yml`），它不会出现在任何一层——先在「用户扩展」里用「补登记」把它登记进依赖，再确认激活行存在。
+插件管理以运行时 Loader 条目为准。如果你只是 `npm i` 了包但没加激活行（`cordis.patch.yml`），它不会出现在任何一层。请到 profile 的 `package.json`（`dsh.profile.bundles`）或 `cordis.patch.yml` 里为它加上激活，再重启服务。
 
-**那些带「未登记依赖」标签的是什么？**
-手工丢进 `node_modules`、没写进 `package.json` 的插件（比如你自己拷进去的）。点「补登记」即可纳入依赖管理，插件市场也能看到它。
+**插件显示「未生效 / 加载失败」怎么办？**
+说明它已装好但当前没跑起来。点该行「为什么未生效？」会列出原因和按步修复建议；点「🤖 AI 修复」会把诊断与修复步骤整理成提示词，复制给一个新的 Agent 对话，由它帮你排查修复（发送与否由你决定）。
 
 **原生插件的描述能改吗？**
 能。所有插件都支持「编辑描述」，改完存到 `~/.dsh/profiles/web/plugin-manager/descriptions.json`，重启后仍在。
